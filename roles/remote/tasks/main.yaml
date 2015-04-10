@@ -5,3 +5,15 @@
 - include: ssh.yaml
   tags: ssh
 
+- name: install dev packages
+  sudo: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - python-setuptools
+    - python-pip
+    - cmake
+    - htop
+    - python-dev
+
+- name: make python code path
+  file: path=/home/{{ default_user }}/code/python state=directory

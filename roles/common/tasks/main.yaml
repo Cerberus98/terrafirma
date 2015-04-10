@@ -15,6 +15,6 @@
     - software-properties-common                                               
     - tmux                                                                     
     - vim                                                                      
-    - cmake                                                                    
     - curl                                                                     
-    - wget                                                                     
+    - wget
+    - git-core

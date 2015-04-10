@@ -1,0 +1,40 @@
+---
+- name: install dev packages
+  sudo: yes
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - erlang
+    - rabbitmq-server
+    - mysql-server
+    - redis-server
+
+- name: install global python packages
+  sudo: yes
+  action: shell pip install {{ item }}
+  with_items:
+    - virtualenv
+    - rackspace-novaclient
+    - rackspace-neutronclient
+
+- name: make python code path
+  file: path=/home/{{ default_user }}/code/python state=directory
+
+- name: clone openstack python repos
+  git: repo=https://github.com/openstack/{{ item }}.git
+       clone=yes
+       dest=/home/{{ default_user }}/code/python/{{ item }}
+       accept_hostkey=yes
+  with_items:
+    - nova
+    - neutron
+    - glance
+    - keystone
+
+- name: clone rackerlabs python repos
+  git: repo=https://github.com/rackerlabs/{{ item }}.git
+       clone=yes
+       dest=/home/{{ default_user }}/code/python/{{ item }}
+       accept_hostkey=yes
+  with_items:
+    - quark
+    - yagi
