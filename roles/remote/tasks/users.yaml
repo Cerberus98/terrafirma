@@ -1,0 +1,23 @@
+---
+- name: create default group
+  sudo: yes
+  group: name={{ default_group }} state=present
+
+- name: create default user
+  sudo: yes
+  user: name={{ default_user }} shell=/bin/bash group={{ default_group }}
+
+- name: ensure the stupid .ssh folder exists
+  sudo: yes
+  file: path=/home/{{ default_user }}/.ssh state=directory owner={{ default_user }} group={{ default_group }}
+
+- name: set password from CLI
+  sudo: yes
+  action: shell echo {{ default_user }}:{{ user_pass }} | chpasswd -c SHA512
+  when: user_pass is defined
+
+- name: Copy over SSH public key if provided
+  sudo: yes
+  authorized_key: user={{ default_user }} key="{{ lookup('file', ssh_key_path) }}"
+  when: ssh_key_path is defined
+  

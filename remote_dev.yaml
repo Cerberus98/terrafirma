@@ -1,0 +1,5 @@
+---
+- hosts: remote
+  roles:
+    - common
+    - { role: remote, default_user: cerberus, default_group: developers, default_ssh_port: 314 }
