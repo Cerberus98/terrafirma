@@ -1,20 +1,39 @@
----                                                                                
+---
 - name: make sure python-apt is installed so ansible can install things
   sudo: yes
   action: shell apt-get install python-apt-common -y
-    
+
 - name: remove password prompt for sudo
   sudo: yes
   lineinfile: "dest=/etc/sudoers state=present regexp='^%developers' line='%developers ALL=(ALL) NOPASSWD: ALL'"
 
-- name: install packages                                                       
-  sudo: yes                                                                    
-  apt: pkg={{ item }} state=latest update_cache=yes                              
-  with_items:                                                                  
+- name: install packages
+  sudo: yes
+  apt: pkg={{ item }} state=latest update_cache=yes
+  with_items:
     - build-essential
-    - software-properties-common                                               
-    - tmux                                                                     
-    - vim                                                                      
-    - curl                                                                     
+    - software-properties-common
+    - tmux
+    - vim
+    - curl
     - wget
     - git-core
+
+- name: Fetch dotfiles and set them up
+  git: repo=https://github.com/cerberus98/dotfiles.git
+       clone=yes
+       dest=/home/{{ default_user }}/dotfiles
+
+
+- name: Install dotfiles to homedir
+  command: mv /home/{{ default_user }}/dotfiles/.{{ item }} /home/{{ default_user }}/
+  with_items:
+    - bash_profile
+    - gitconfig
+    - tmux.conf
+    - vimrc
+    - vim
+    - git-completion.bash
+
+- name: Make vim swap directory to support the vim config
+  file: path=/home/{{ default_user }}/.vim/swap state=directory
