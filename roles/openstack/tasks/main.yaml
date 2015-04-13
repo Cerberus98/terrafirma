@@ -8,6 +8,12 @@
     - mysql-server
     - redis-server
     - libmysqlclient-dev
+    - libffi-dev
+    - libsqlite3-dev
+    - libldap2-dev
+    - libsasl2-dev
+    - libxml2-dev
+    - libxslt1-dev
 
 - name: install global python packages
   sudo: yes
@@ -30,6 +36,9 @@
     - neutron
     - glance
     - keystone
+    - python-novaclient
+    - python-neutronclient
+    - python-keystoneclient
 
 - name: clone rackerlabs python repos
   git: repo=https://github.com/rackerlabs/{{ item }}.git
