@@ -22,6 +22,7 @@
     - virtualenv
     - rackspace-novaclient
     - rackspace-neutronclient
+    - tox
 
 - name: make python code path
   file: path=/home/{{ default_user }}/code/python state=directory
