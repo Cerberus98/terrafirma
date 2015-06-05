@@ -20,7 +20,7 @@
     - git-core
 
 - name: Fetch dotfiles and set them up
-  git: repo=https://github.com/cerberus98/dotfiles.git
+  git: repo=https://github.com/Cerberus98/dotfiles.git
        clone=yes
        dest=/home/{{ default_user }}/dotfiles
 

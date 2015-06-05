@@ -7,6 +7,11 @@
   sudo: yes
   user: name={{ default_user }} shell=/bin/bash group={{ default_group }}
 
+- name: create screen share user
+  sudo: yes
+  user: name={{ tmux_shared_user }} shell=/bin/bash group={{ default_group }}
+  when: tmux_shared_user is defined
+
 - name: ensure the stupid .ssh folder exists
   sudo: yes
   file: path=/home/{{ default_user }}/.ssh state=directory owner={{ default_user }} group={{ default_group }}
@@ -16,8 +21,12 @@
   action: shell echo {{ default_user }}:{{ user_pass }} | chpasswd -c SHA512
   when: user_pass is defined
 
+- name: set tmux_shared_user password from CLI
+  sudo: yes
+  action: shell echo {{ tmux_shared_user }}:{{ tmux_shared_user_pass }} | chpasswd -c SHA512
+  when: tmux_shared_user_pass is defined
+
 - name: Copy over SSH public key if provided
   sudo: yes
   authorized_key: user={{ default_user }} key="{{ lookup('file', ssh_key_path) }}"
   when: ssh_key_path is defined
-  
